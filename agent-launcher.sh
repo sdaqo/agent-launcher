@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-# HDR + Agent for Trails in the Sky 1st Chapter
-# use `AGENT_ONLY=0 /path/to/script.sh %command%` in steam launch options
-# AGENT_LOG=0 AGENT_DOWNLOAD=1 AGENT_PORT=6677 AGENT_IP="0.0.0.0" AGENT_SCRIPT="PC_Steam_Sora_no_Kiseki_the_1st.js" AGENT_HDR=1 /home/paul/Development/random/agent_launcher/launch_hooker.sh %command%
-
-
 if [[ $AGENT_LOG == 1 ]]; then
   LOG_FILE="/tmp/agent_launcher_log.txt"
   exec 3>&1 4>&2
