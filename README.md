@@ -25,3 +25,50 @@ AGENT_SCRIPTS_DL_URL: Agent scripts download url: (Default: https://github.com/0
 AGENT_PORT: Agent websocket port. (Default: 6677)
 AGENT_IP: Agent websocket host. (Default: 0.0.0.0)
 ```
+
+## Nix
+
+Use this to add it to your nix config:
+
+```nix
+{ pkgs, lib, ... }:
+let
+  agent-launcher = pkgs.stdenv.mkDerivation rec {
+    version = "x.x"; # Replace with current release version
+    name = "agent-launcher";
+    src = pkgs.fetchFromGitHub {
+      owner = "sdaqo";
+      repo = "agent-launcher";
+      rev = "v${version}";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="; # Replace with correct hash
+    };
+
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    runtimeInputs = with pkgs; [
+      wget
+      bash
+      unzip
+      wget
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm755 agent-launcher.sh $out/bin/agent-launcher.sh
+
+      wrapProgram $out/bin/agent-launcher.sh \
+        --prefix PATH : ${lib.makeBinPath runtimeInputs}
+
+      runHook postInstall
+    '';
+  };
+in 
+{
+  programs.steam = {
+    enable = true;
+    extraPackages = with pkgs; [
+      agent-launcher # Add it to extra packages
+    ];
+  };
+}
+```
