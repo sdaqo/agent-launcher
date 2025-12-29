@@ -1,2 +1,2 @@
 # agent-launcher
-Agent wrapper for steam games under linux
+Automatically download, and attach [Agent](https://github.com/0xDC00/agent) to Steam games. 
