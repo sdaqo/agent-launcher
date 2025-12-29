@@ -38,7 +38,7 @@ for arg in "$@"; do
 done
 
 if [[ $AGENT_SKIP_HELP != 1 ]]; then
-cat << 'EOF' | yad --notification
+cat << EOF
 usage: [ENV VARS...] agent-launcher.sh %command%
 
 Launches agent + game together + various ulility stuff
