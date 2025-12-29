@@ -48,7 +48,6 @@ let
       wget
       bash
       unzip
-      wget
     ];
 
     installPhase = ''
