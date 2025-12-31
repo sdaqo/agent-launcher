@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
 if [[ $AGENT_LOG == 1 ]]; then
-  LOG_FILE="/tmp/agent_launcher_log.txt"
+  LOG_FILE="$HOME/agent_launcher_log.txt"
   exec 3>&1 4>&2
   trap 'exec 2>&4 1>&3' 0 1 2 3
   exec 1>$LOG_FILE.1 2>&1
 else
   LOG_FILE="/dev/null"
 fi
-
 
 GAME_EXE="${@: -1}"
 GAME_DIR=$(dirname "$GAME_EXE")
