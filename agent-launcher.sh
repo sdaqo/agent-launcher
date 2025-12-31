@@ -24,7 +24,7 @@ GAME_DIR=$(dirname "$GAME_EXE")
 [[ -z "$AGENT_SKIP_HELP" ]] && AGENT_SKIP_HELP=0
 [[ -z "$AGENT_HDR" ]] && AGENT_HDR=0
 [[ -z "$AGENT_DOWNLOAD" ]] && AGENT_DOWNLOAD=1
-[[ -z "$AGENT_SCRIPTS_DOWNLOAD" ]] && AGENT_SCRIPT_DOWNLOAD=1
+[[ -z "$AGENT_SCRIPTS_DOWNLOAD" ]] && AGENT_SCRIPTS_DOWNLOAD=1
 [[ -z "$AGENT_DL_URL" ]] && AGENT_DL_URL="https://github.com/0xDC00/agent/releases/latest/download/agent-v0.1.4-win32-x64.zip"
 [[ -z "$AGENT_SCRIPTS_DL_URL" ]] && AGENT_SCRIPTS_DL_URL="https://github.com/0xDC00/scripts/archive/refs/heads/main.zip"
 [[ -z "$AGENT_PORT" ]] && AGENT_PORT=6677
@@ -77,20 +77,20 @@ if [[ $AGENT_DOWNLOAD == 1 && ! -f "$AGENT_PATH/agent.exe" ]]; then
   wget "$AGENT_DL_URL" -O "$agent_zip"
   unzip "$agent_zip" -d "$AGENT_PATH"
   rm "$agent_zip"
-  
-  if [[ $AGENT_SCRIPTS_DOWNLOAD == 1 ]]; then
-    echo "[$(date)] --- DOWNLOADING AGENT SCRIPTS ---" >> "$LOG_FILE"
+fi
 
-    scripts_zip="$AGENT_PATH/scripts.zip"
+if [[ $AGENT_SCRIPTS_DOWNLOAD == 1 && ! -d "$AGENT_SCRIPTS_PATH" ]]; then
+  echo "[$(date)] --- DOWNLOADING AGENT SCRIPTS ---" >> "$LOG_FILE"
 
-    echo "[$(date)]   Fetching scripts from github" >> "$LOG_FILE"
-    mkdir -p "$AGENT_SCRIPTS_PATH"
-    wget "https://github.com/0xDC00/scripts/archive/refs/heads/main.zip" -O "$scripts_zip"
-    unzip "$scripts_zip" -d "$AGENT_PATH"
-    mv -T "$AGENT_PATH/scripts-main" "$AGENT_SCRIPTS_PATH"
-    rm "$scripts_zip"
-    echo "[$(date)]   Download finished" >> "$LOG_FILE"
-  fi
+  scripts_zip="$AGENT_PATH/scripts.zip"
+
+  echo "[$(date)]   Fetching scripts from $AGENT_SCRIPTS_DL_URL" >> "$LOG_FILE"
+  mkdir -p "$AGENT_SCRIPTS_PATH"
+  wget "$AGENT_SCRIPTS_DL_URL" -O "$scripts_zip"
+  unzip "$scripts_zip" -d "$AGENT_PATH"
+  mv -T "$AGENT_PATH/scripts-main" "$AGENT_SCRIPTS_PATH"
+  rm "$scripts_zip"
+  echo "[$(date)]   Download finished" >> "$LOG_FILE"
 fi
 
 # Patch bundle.js with ip/port
